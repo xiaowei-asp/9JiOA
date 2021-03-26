@@ -5,5 +5,10 @@
     <RootNamespace>_9JiOA.Service.Delivers</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="Domains\" />
+  </ItemGroup>
+
 
 </Project>
