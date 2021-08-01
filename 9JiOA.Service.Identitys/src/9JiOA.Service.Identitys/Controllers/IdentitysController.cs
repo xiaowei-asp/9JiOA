@@ -5,20 +5,20 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace _9JiOA.Service.Customers.Controllers
+namespace _9JiOA.Service.Identitys.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    [Route("api/[controller]")]
+    public class IdentitysController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<IdentitysController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public IdentitysController(ILogger<IdentitysController> logger)
         {
             _logger = logger;
         }

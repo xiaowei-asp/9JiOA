@@ -1,6 +1,6 @@
 using System;
 
-namespace _9JiOA.Service.ApiGateway
+namespace _9JiOA.Service.Identitys
 {
     public class WeatherForecast
     {

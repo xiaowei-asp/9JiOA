@@ -1,12 +1,17 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Ocelot.DependencyInjection;
-using Ocelot.Middleware;
+using Microsoft.Extensions.Logging;
 
-namespace _9JiOA.Service.ApiGateway
+namespace _9JiOA.Service.Identitys
 {
     public class Startup
     {
@@ -21,7 +26,6 @@ namespace _9JiOA.Service.ApiGateway
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddOcelot();//.AddCacheManager(settings => settings.WithDictionaryHandle());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,8 +46,6 @@ namespace _9JiOA.Service.ApiGateway
             {
                 endpoints.MapControllers();
             });
-
-            app.UseOcelot().GetAwaiter().GetResult();
         }
     }
 }
