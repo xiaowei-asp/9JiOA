@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,6 +27,16 @@ namespace _9JiOA.Service.Customers
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            var authenticationProviderKey = "TestKey";
+            Action<JwtBearerOptions> options = o =>
+            {
+                o.Authority = "http://localhost:5000";
+                // etc
+            };
+
+            services.AddAuthentication()
+                .AddJwtBearer(authenticationProviderKey, options);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,7 +51,7 @@ namespace _9JiOA.Service.Customers
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

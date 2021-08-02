@@ -5,5 +5,9 @@
     <RootNamespace>_9JiOA.Service.Identitys</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\9JiOA.Service.Identitys.Infrastructure\9JiOA.Service.Identitys.Infrastructure.csproj" />
+  </ItemGroup>
+
 
 </Project>

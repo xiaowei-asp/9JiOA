@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using _9JiOA.Service.Identitys.Infrastructure.AggregateRoots.Users;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -34,6 +35,20 @@ namespace _9JiOA.Service.Identitys.Controllers
                 Summary = Summaries[rng.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+
+        [HttpGet("get-user/{userId}")]
+        public UserInfoDto GetUserInfo(string userId)
+        {
+            var userDto = new UserInfoDto();
+            if (userId == "123")
+            {
+                userDto.Id = userId;
+                userDto.UserName = "identity-user";
+                userDto.NickName = "identity";
+                userDto.Address = "identity/get-user";
+            }
+            return userDto;
         }
     }
 }

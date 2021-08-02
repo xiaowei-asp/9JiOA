@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using _9JiOA.Service.Customers.Infrastructure.AggregateRoots;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -34,6 +36,31 @@ namespace _9JiOA.Service.Customers.Controllers
                 Summary = Summaries[rng.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+
+        [HttpPost]
+        public List<WeatherForecast> Add(WeatherForecast model)
+        {
+            model.Date = DateTime.Now;
+            var list = new List<WeatherForecast>();
+            list.Add(model);
+            return list;
+        }
+
+        [HttpGet("get-user/{userId}")]
+        public UserInfoDto GetUserInfo(string userId)
+        {
+            var userDto = new UserInfoDto();
+
+            if (userId == "124" || userId == "123")
+            {
+                userDto.Id = userId;
+                userDto.UserName = "identity-user";
+                userDto.NickName = "identity";
+                userDto.Address = "identity/get-user";
+                userDto.IsVip = false;
+            }
+            return userDto;
         }
     }
 }
