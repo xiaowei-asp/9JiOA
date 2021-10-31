@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -17,6 +16,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Ocelot.Cache.CacheManager;
 
 namespace _9JiOA.Service.ApiGateway
 {
@@ -59,7 +59,10 @@ namespace _9JiOA.Service.ApiGateway
 
             });
             //ÈÛ¶Ï
-            services.AddOcelot().AddPolly();
+            services.AddOcelot().AddPolly().AddCacheManager(x =>
+            {
+                x.WithDictionaryHandle();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
