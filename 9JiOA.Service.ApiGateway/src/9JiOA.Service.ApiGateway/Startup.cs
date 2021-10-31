@@ -9,6 +9,8 @@ using Microsoft.IdentityModel.Tokens;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using Ocelot.Multiplexer;
+using Ocelot.Provider.Polly;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -31,15 +33,33 @@ namespace _9JiOA.Service.ApiGateway
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            var authenticationProviderKey = "TestKey";
-            services.AddAuthentication()
-                .AddJwtBearer(authenticationProviderKey, x =>
+            services.AddAuthentication().AddJwtBearer("9ji_oa_identity_api_secret", options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    x.Authority = "test";
-                    x.Audience = "test";
-                });
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("9ji_oa_identity_api_secret")),
+                    ValidAudience = "identity_api",
+                    ValidIssuer = "identity_api",
+                    ValidateIssuerSigningKey = true,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                };
 
-            services.AddOcelot();//.AddSingletonDefinedAggregator<FakeDefinedAggregator>();
+            }).AddJwtBearer("9ji_oa_customers_api_secret", options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("9ji_oa_customers_api_secret")),
+                    ValidAudience = "customer-api",
+                    ValidIssuer = "customer-api",
+                    ValidateIssuerSigningKey = true,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                };
+
+            });
+            //ÈÛ¶Ï
+            services.AddOcelot().AddPolly();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,7 +74,7 @@ namespace _9JiOA.Service.ApiGateway
 
             app.UseRouting();
 
-            //app.UseAuthentication();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

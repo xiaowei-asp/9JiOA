@@ -1,28 +1,45 @@
 {
   "Routes": [
+    //IdentityServices
     {
-      "DownstreamPathTemplate": "/api/{controller}/{action}",
-      "DownstreamScheme": "http",
+      "DownstreamPathTemplate": "/api/{controller}/{action}", //目的地址模板(下游路径模板)
+      "DownstreamScheme": "http", //目的地址协议(下游路径协议)
       //"DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
+      "DownstreamHostAndPorts": [ //目的地址 ip 和 端口
         {
           "Host": "localhost",
-          //"Port": 44311
           "Port": 5001
+        },
+        {
+          "Host": "127.0.0.1",
+          "Port": 6001
         }
       ],
-      "UpstreamPathTemplate": "/identity-api/{controller}/{action}",
-      "UpstreamHttpMethod": [ "Get" ],
-      "RouteIsCaseSensitive": true,
+      "UpstreamPathTemplate": "/identity-api/{controller}/{action}", //网关地址模板路径
+      "UpstreamHttpMethod": [ "GET", "PUT", "POST", "DELETE" ], //允许访问的方法
+      //负载均衡
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+
+      "RouteIsCaseSensitive": true, //路由区分大小写
       "RateLimitOptions": {
-        "ClientWhitelist": [],
-        "EnableRateLimiting": true,
-        "Period": "5s",
-        "PeriodTimespan": 1,
-        "Limit": 1
+        "ClientWhitelist": [], //客户端白名单。名单中的客户端不会被限流。在请求头中包含ClientId=xxx的请求不受限流控制。
+        "EnableRateLimiting": true, //是否启用限流。
+        "Period": "5s", //限流时间（1s，5m，1h，1d）。在限流时间内限制请求数，需要等PeriodTimespan时间过去了，才能再次发起请求。
+        "PeriodTimespan": 1, //限流时间间隔，限流后多少秒后才可以再次发起请求。
+        "Limit": 1 //限制请求数。
+      },
+      //熔断配置
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3, //允许多少个异常请求。
+        "DurationOfBreak": 20, //熔断的时间(秒)。
+        "TimeoutValue": 5000 //下游请求的处理时间超过多少则将请求设置为超时。
       },
       "FileCacheOptions": { "TtlSeconds": 30 }
     },
+
+    //CustomerServices
     {
       "DownstreamPathTemplate": "/api/{controller}/{action}",
       //"DownstreamScheme": "https",
@@ -35,16 +52,16 @@
         }
       ],
       "UpstreamPathTemplate": "/customer-api/{controller}/{action}",
-      "UpstreamHttpMethod": [ "Get", "POST", "PUT", "DELETE" ],
-
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      //授权配置
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "TestKey",
+        "AuthenticationProviderKey": "9ji_oa_customers_api_secret", //
         "AllowedScopes": []
       },
-
+      //限流配置
       "RouteIsCaseSensitive": true,
       "RateLimitOptions": {
-        "ClientWhitelist": [],
+        "ClientWhitelist": [], //限制客户端
         "EnableRateLimiting": true,
         "Period": "5s",
         "PeriodTimespan": 1,
@@ -55,6 +72,7 @@
       "Key": "{controller}-{action}"
     },
 
+    //聚合查询
     {
       "DownstreamPathTemplate": "/api/identitys/get-user/{id}",
       "DownstreamScheme": "http",
@@ -92,7 +110,12 @@
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "http://localhost:5000"
-    //"BaseUrl": "https://localhost:44310"
+    "BaseUrl": "http://localhost:5000",
+    "RateLimitOptions": {
+      //是否禁用X-Rate-Limit和Retry-After标头。
+      "DisableRateLimitHeaders": false,
+      //限流返回的消息。
+      "QuotaExceededMessage": "您访问的网站流量处于流量高峰期，您的请求被截断了"
+    }
   }
 }

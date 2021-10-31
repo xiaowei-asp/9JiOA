@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using _9JiOA.Service.Customers.Infrastructure.AggregateRoots;
+using ASample.NetCore.Redis;
+using Autofac;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Ocelot.DependencyInjection;
 
 namespace _9JiOA.Service.Customers
 {
@@ -27,16 +32,7 @@ namespace _9JiOA.Service.Customers
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-
-            var authenticationProviderKey = "TestKey";
-            Action<JwtBearerOptions> options = o =>
-            {
-                o.Authority = "http://localhost:5000";
-                // etc
-            };
-
-            services.AddAuthentication()
-                .AddJwtBearer(authenticationProviderKey, options);
+            services.AddRedis();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +53,15 @@ namespace _9JiOA.Service.Customers
             {
                 endpoints.MapControllers();
             });
+
+        }
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            //configure auto fac here
+            builder.RegisterAssemblyTypes(Assembly.GetEntryAssembly())
+                .AsImplementedInterfaces();
+            builder.AddCustomerRedis();
         }
     }
 }
