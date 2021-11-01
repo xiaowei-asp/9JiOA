@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>_9JiOA.Service.Delivers.Infrastructure</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Domains\ExpressCompany\ShunfengLogistic\" />
+    <Folder Include="Domains\ExpressCompany\DadaLogistic\" />
+    <Folder Include="Domains\ExpressCompany\MeituanLogistic\" />
+    <Folder Include="Domains\LogisticParams\" />
+  </ItemGroup>
+
+</Project>
