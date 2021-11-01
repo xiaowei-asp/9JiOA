@@ -1,10 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace _9JiOA.Service.ApiGateway
+namespace _9JiOA.Service.Identitys
 {
     public class Program
     {
@@ -17,11 +20,7 @@ namespace _9JiOA.Service.ApiGateway
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.ConfigureAppConfiguration(config =>
-                        config.AddJsonFile($"ocelot.{env}.json"));
-                })
-             .ConfigureLogging(logging => logging.AddConsole());
+                });
     }
 }

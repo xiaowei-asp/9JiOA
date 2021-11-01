@@ -1,0 +1,98 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/{controller}/{action}",
+      "DownstreamScheme": "http",
+      //"DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          //"Port": 44311
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/identity-api/{controller}/{action}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "RouteIsCaseSensitive": true,
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "5s",
+        "PeriodTimespan": 1,
+        "Limit": 1
+      },
+      "FileCacheOptions": { "TtlSeconds": 30 }
+    },
+    {
+      "DownstreamPathTemplate": "/api/{controller}/{action}",
+      //"DownstreamScheme": "https",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          //"Port": 44312
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/customer-api/{controller}/{action}",
+      "UpstreamHttpMethod": [ "Get", "POST", "PUT", "DELETE" ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "TestKey",
+        "AllowedScopes": []
+      },
+
+      "RouteIsCaseSensitive": true,
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "5s",
+        "PeriodTimespan": 1,
+        "Limit": 1
+      },
+
+      "FileCacheOptions": { "TtlSeconds": 30 },
+      "Key": "{controller}-{action}"
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/identitys/get-user/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/identity/get-user",
+      "UpstreamHttpMethod": [ "Get" ],
+      "Key": "identity-get-user"
+    },
+    {
+      "DownstreamPathTemplate": "/api/customers/get-user/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/customers/get-user",
+      "UpstreamHttpMethod": [ "Get" ],
+      "Key": "customer-get-user"
+    }
+  ],
+  "Aggregates": [
+    {
+      "RouteKeys": [
+        "identity-get-user",
+        "customer-get-user"
+      ],
+      "UpstreamPathTemplate": "/api/user/{id}"
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:5000"
+    //"BaseUrl": "https://localhost:44310"
+  }
+}
