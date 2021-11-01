@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using _9JiOA.Service.Customers.Infrastructure.AggregateRoots;
 using ASample.NetCore.Redis;
@@ -15,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Ocelot.DependencyInjection;
 
 namespace _9JiOA.Service.Customers
@@ -33,6 +35,20 @@ namespace _9JiOA.Service.Customers
         {
             services.AddControllers();
             services.AddRedis();
+            services.AddAuthorization();
+            services.AddAuthentication().AddJwtBearer("9ji_oa_customers_api_secret", options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("9ji_oa_customers_api_secret")),
+                    ValidAudience = "identity_api",
+                    ValidIssuer = "identity_api",
+                    ValidateIssuerSigningKey = true,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                };
+
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,7 +63,7 @@ namespace _9JiOA.Service.Customers
 
             app.UseRouting();
 
-            //app.UseAuthorization();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
