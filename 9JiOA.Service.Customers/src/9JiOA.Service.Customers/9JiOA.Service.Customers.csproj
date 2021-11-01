@@ -6,7 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ASample.NetCore" Version="3.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.17" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
+    <PackageReference Include="Ocelot" Version="15.0.7" />
   </ItemGroup>
 
   <ItemGroup>

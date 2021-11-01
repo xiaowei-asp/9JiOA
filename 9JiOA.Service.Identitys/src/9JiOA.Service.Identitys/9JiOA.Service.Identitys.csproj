@@ -6,6 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ASample.NetCore" Version="3.1.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.14.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\9JiOA.Service.Identitys.Infrastructure\9JiOA.Service.Identitys.Infrastructure.csproj" />
   </ItemGroup>
 
